@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#111827">
+    <title>LeaderCoders Zaman Yönetimi</title>
+    <link rel="icon" type="image/png" href="sirket-logo-fav.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+<body data-theme="dark">
+
+    <div id="quote-display"></div>
+
+    <div id="app-container">
+        <nav id="top-bar">
+            <div class="nav-section nav-left">
+                <a href="https://leadercoders.com" target="_blank" rel="noopener noreferrer" class="nav-logo">
+                    <img src="sirket-logo-light.png" alt="LeaderCoders Logo" id="logo">
+                </a>
+                <div id="top-bar-presets" class="hide-on-fullscreen"></div>
+            </div>
+            <div class="nav-section nav-center hide-on-fullscreen">
+                <button id="mode-timer" class="mode-switch-btn active">Zamanlayıcı</button>
+                <button id="mode-stopwatch" class="mode-switch-btn">Kronometre</button>
+            </div>
+            <div class="nav-section nav-right">
+                <!-- YouTube Kontrol Arayüzü -->
+                <div id="music-player" class="hide-on-fullscreen">
+                    <button id="music-play-pause-btn" class="icon-btn music-control" aria-label="Oynat/Duraklat"><span id="music-play-icon" class="material-symbols-outlined">play_arrow</span></button>
+                    <input type="range" id="music-volume-slider" min="0" max="1" step="0.05" value="0.5" aria-label="Ses Seviyesi">
+                </div>
+                <button id="start-break-btn" class="top-action-btn hide-on-fullscreen">Teneffüs</button>
+                <button id="start-exercise-btn" class="top-action-btn hide-on-fullscreen">Alıştırma</button>
+                <button id="fullscreen-btn" class="icon-btn" aria-label="Tam Ekran">
+                    <span id="fullscreen-icon" class="material-symbols-outlined">fullscreen</span>
+                </button>
+                <button id="settings-btn" class="icon-btn" aria-label="Ayarlar">
+                    <span id="settings-icon" class="material-symbols-outlined">settings</span>
+                </button>
+            </div>
+        </nav>
+
+        <main id="main-content" data-active-mode="timer">
+            <!-- ZAMANLAYICI BÖLÜMÜ -->
+            <div id="timer-wrapper">
+                <div id="fullscreen-logo-container">
+                    <img src="sirket-logo-light.png" alt="LeaderCoders Logo" id="fullscreen-logo">
+                </div>
+                <div class="timer">
+                    <svg class="progress-ring" viewBox="0 0 300 300">
+                        <circle class="progress-ring__background" cx="150" cy="150" r="140" />
+                        <circle class="progress-ring__circle" cx="150" cy="150" r="140" />
+                    </svg>
+                    <div id="time-display" class="display-font">00:00:00</div>
+                </div>
+                <div class="hide-on-fullscreen">
+                    <div id="preset-buttons" class="preset-buttons-container"></div>
+                    <div class="controls">
+                        <button id="start-pause-btn" class="control-btn main-btn">BAŞLAT</button>
+                        <button id="reset-btn" class="control-btn secondary-btn">SIFIRLA</button>
+                    </div>
+                </div>
+            </div>
+            <!-- KRONOMETRE BÖLÜMÜ -->
+            <div id="stopwatch-wrapper">
+                 <div class="stopwatch-display-container">
+                    <div id="stopwatch-display" class="display-font">00:00:00.000</div>
+                </div>
+                <div class="hide-on-fullscreen">
+                    <div class="controls">
+                        <button id="sw-start-stop-btn" class="control-btn main-btn">BAŞLAT</button>
+                        <button id="sw-lap-reset-btn" class="control-btn secondary-btn">TUR</button>
+                    </div>
+                    <div class="laps-container">
+                        <ul id="laps-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AYARLAR MODALI -->
+    <div id="settings-modal" class="modal-overlay hidden">
+         <div class="modal-content">
+            <h2>Ayarlar</h2>
+            <div class="setting-item">
+                <label for="theme-select">Tema</label>
+                <select id="theme-select">
+                    <option value="dark">Karanlık</option>
+                    <option value="light">Aydınlık</option>
+                </select>
+            </div>
+             <div class="setting-item">
+                <label for="end-message">Bitiş Mesajı</label>
+                <input type="text" id="end-message" placeholder="Süre doldu!">
+            </div>
+            <div class="setting-item">
+                <label for="alarm-sound">Alarm Sesi</label>
+                <div class="sound-select-wrapper">
+                    <select id="alarm-sound">
+                        <option value="profesyonel-zil.mp3">Profesyonel Zil</option>
+                        <option value="dijital-bip.mp3">Dijital Bip</option>
+                        <option value="horoz.mp3">Horoz Sesi</option>
+                        <option value="siren.mp3">Siren Sesi</option>
+                        <option value="alkis.mp3">Alkış Sesi</option>
+                    </select>
+                    <button id="preview-sound-btn" class="icon-btn" aria-label="Sesi Önizle">
+                        <span class="material-symbols-outlined">play_circle</span>
+                    </button>
+                </div>
+            </div>
+            <div class="setting-item toggle-switch">
+                <label for="countdown-tick-toggle">Son 10sn Ses Efekti</label>
+                <input type="checkbox" id="countdown-tick-toggle" class="toggle-input">
+                <label for="countdown-tick-toggle" class="toggle-label"></label>
+            </div>
+
+            <!-- KAPSAMLI ÖZLÜ SÖZ AYARLARI -->
+            <div class="setting-item manager-section">
+                 <h3>Özlü Söz Ayarları (Tam Ekran)</h3>
+                 <div class="setting-item toggle-switch">
+                    <label for="show-quotes-toggle">Özlü Sözleri Göster</label>
+                    <input type="checkbox" id="show-quotes-toggle" class="toggle-input">
+                    <label for="show-quotes-toggle" class="toggle-label"></label>
+                 </div>
+                 <div class="setting-item toggle-switch">
+                    <label for="smart-random-toggle">Akıllı Rastgele Mod</label>
+                    <input type="checkbox" id="smart-random-toggle" class="toggle-input">
+                    <label for="smart-random-toggle" class="toggle-label"></label>
+                 </div>
+                 <div class="setting-item">
+                    <label for="quote-duration-input">Gösterim Süresi (saniye)</label>
+                    <input type="number" id="quote-duration-input" min="1" placeholder="5">
+                 </div>
+                 <div class="setting-item">
+                    <label for="quote-frequency-input">Gösterim Sıklığı (saniye)</label>
+                    <input type="number" id="quote-frequency-input" min="1" placeholder="15">
+                 </div>
+            </div>
+
+            <div class="setting-item manager-section">
+                <h3>Özlü Sözleri Yönet</h3>
+                <div class="add-item-form">
+                    <input type="text" id="quote-input" placeholder="Yeni bir özlü söz ekleyin...">
+                    <button id="add-quote-btn" class="main-btn">Ekle</button>
+                </div>
+                <ul id="quote-list" class="item-list"></ul>
+            </div>
+
+             <div class="setting-item manager-section">
+                <h3>Hazır Butonları Yönet</h3>
+                <div class="add-item-form">
+                    <input type="text" id="preset-label" placeholder="Etiket">
+                    <input type="number" id="preset-minutes" min="1" placeholder="Süre (dk)">
+                    <button id="add-preset-btn" class="main-btn">Ekle</button>
+                </div>
+                <ul id="preset-list" class="item-list"></ul>
+            </div>
+             <div class="setting-item import-export">
+                <h3>Ayarları Yönet</h3>
+                <div class="controls">
+                    <button id="import-settings-btn" class="control-btn secondary-btn">İçeri Aktar</button>
+                    <button id="export-settings-btn" class="control-btn secondary-btn">Dışarı Aktar</button>
+                </div>
+             </div>
+            <button id="close-settings-btn" class="control-btn">Kapat</button>
+        </div>
+    </div>
+    
+    <div id="session-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 id="session-modal-title">Süreyi Belirle</h2>
+            <p id="session-modal-description"></p>
+            <div class="setting-item">
+                <label for="session-minutes-input">Süre (dakika)</label>
+                <input type="number" id="session-minutes-input" min="1" placeholder="Örn: 15">
+            </div>
+            <div class="controls">
+                <button id="start-session-timer-btn" class="control-btn main-btn">Başlat</button>
+                <button id="cancel-session-modal-btn" class="control-btn secondary-btn">İptal</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="alarm-screen" class="modal-overlay hidden">
+        <div class="alarm-content">
+            <h1 id="alarm-title">SÜRE DOLDU!</h1>
+            <p id="alarm-message"></p>
+            <button id="stop-alarm-btn" class="control-btn main-btn">ALARMİ DURDUR</button>
+        </div>
+    </div>
+
+    <!-- YouTube Iframe Oynatıcısı -->
+    <div id="youtube-player-container">
+        <div id="youtube-player"></div>
+    </div>
+
+    <audio id="alarm-audio"></audio>
+    <audio id="preview-audio"></audio>
+    <audio id="tick-audio" src="audio/dijital-bip.mp3" preload="auto"></audio>
+
+    <!-- YouTube API Script'i -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="script.js"></script>
+</body>
+</html>
