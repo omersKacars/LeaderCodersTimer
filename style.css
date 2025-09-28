@@ -698,6 +698,16 @@ body.fullscreen-active .display-font {
     font-size: clamp(4rem, 20vw, 8rem);
 }
 
+/* === DEĞİŞİKLİK BAŞLANGICI: Tam Ekran Özlü Söz Konumlandırma Düzeltmesi === */
+body.fullscreen-active #quote-display {
+    bottom: 2vh; /* Özlü sözü ekranın altına daha yakın konumlandırır (önceki %10). */
+    max-width: 80%; /* Daha fazla alan kullanmasına izin verir. */
+    font-size: clamp(1rem, 2.5vw, 1.5rem); /* Yazı tipini biraz küçültür. */
+    text-shadow: 0 2px 15px var(--bg-color); /* Okunabilirliği artırmak için gölgeyi güçlendirir. */
+}
+/* === DEĞİŞİKLİK SONU === */
+
+
 /* --- ALARM EKRANI --- */
 #alarm-screen:not(.hidden) {
     animation: flash-bg 1s infinite alternate;
